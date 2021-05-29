@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <title> Smart Gesture </title>
+    </head>
+    <body>
+        <h1 id="valueX"> X: 0 </h1> <br>
+        <h1 id="valueY"> Y: 0 </h1> <br>
+        <h1 id="valueZ"> Z: 0 </h1> <br>
+        <h2>Group Message: <span id="Group">No message yet</span></h2><br>
+        <input type="submit" id ="Start" name="start" value="Start"/>
+        <input type="submit" id = "Stop" name="stop" value="Stop"/>
+
+        <script>
+            const dataSocket = new WebSocket(
+                'ws://' + window.location.host + '/accelerometer/'
+            );
+            document.getElementById("Start").onclick = () => {
+                    dataSocket.send("DEVICE-START");
+            }
+            document.getElementById("Stop").onclick = () => {
+                   dataSocket.send("DEVICE-STOP");
+            }
+            dataSocket.onmessage = (e) => {
+                //  const data = JSON.pctiarse(e.data);
+                //  document.querySelector('#valueX').innerText =   (data.X);
+                //  document.querySelector('#valueY').innerText =  (data.Y);
+                //  document.querySelector('#valueZ').innerText =  (data.Z);
+                document.querySelector('#Group').innerText = e.data
+            };
+            dataSocket.onclose = (e) => {
+                console.error('Closed unexpectedly');
+            }
+        </script>
+    </body>
+</html>
